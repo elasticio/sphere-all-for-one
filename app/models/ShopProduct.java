@@ -29,7 +29,21 @@ public class ShopProduct {
     }
 
     public static ShopProduct of(Product product) {
-        return of(product, product.getMasterVariant().getId());
+        Variant variant = getAppropriateVariant(product);
+
+        return of(product, variant.getId());
+    }
+
+    private static Variant getAppropriateVariant(Product product) {
+        Variant masterVariant = product.getMasterVariant();
+
+        for (Variant variant : product.getVariants()) {
+            if (variant.getId() != masterVariant.getId() ) {
+                return variant;
+            }
+        }
+
+        return masterVariant;
     }
 
     public static ShopProduct of(Product product, String masterVariantSku) {
